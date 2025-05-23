@@ -2,8 +2,11 @@ package core;
 
 public class Entry {
     public static void main(String[] args) {
-        Window window = new Window("Space War");
+        Window window = new Window("Space War", Window.getWinWidth(), Window.getWinHeight());
         window.addKeyListener(new Input());
+
+        window.packWindow();
+        window.setVisible(true);
 
         boolean runGame = true;
 
