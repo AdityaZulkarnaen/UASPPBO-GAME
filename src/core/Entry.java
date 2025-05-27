@@ -1,5 +1,6 @@
 package core;
 
+import object.AsteroidSpawner;
 import object.Background;
 import object.Spaceship;
 import render.Renderer;
@@ -21,6 +22,7 @@ public class Entry {
         new Spaceship(Window.getWinWidth() / 2 - (Spaceship.width / 2),Window.getWinHeight() - 150);
         new Background(0);
         new Background(-Window.getWinHeight());
+        new AsteroidSpawner();
 
         FPS.calcBeginTime();
         while (runGame) {
