@@ -1,5 +1,6 @@
 package core;
 
+import object.Background;
 import object.Spaceship;
 import render.Renderer;
 import update.Updater;
@@ -17,7 +18,9 @@ public class Entry {
 
         boolean runGame = true;
 
-        new Spaceship(100,100);
+        new Spaceship(Window.getWinWidth() / 2 - (Spaceship.width / 2),Window.getWinHeight() - 150);
+        new Background(0);
+        new Background(-Window.getWinHeight());
 
         FPS.calcBeginTime();
         while (runGame) {

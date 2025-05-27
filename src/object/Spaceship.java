@@ -2,6 +2,7 @@ package object;
 
 import core.FPS;
 import core.Input;
+import core.Window;
 import render.Renderable;
 import render.Renderer;
 import update.Updatable;
@@ -13,7 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class Spaceship implements Renderable, Updatable {
-    private static double width = 75;
+    public static double width = 75;
     private static double height = 75;
     private double x;
     private double y;
@@ -33,11 +34,16 @@ public class Spaceship implements Renderable, Updatable {
         Updater.addUpdatableObjects(this);
     }
 
-    public static double getHeight() {
+    public double getHeight() {
         return height;
     }
 
-    public static double getWidth() {
+    @Override
+    public BufferedImage getBufferedImage() {
+        return spaceShip;
+    }
+
+    public double getWidth() {
         return width;
     }
 
@@ -50,24 +56,19 @@ public class Spaceship implements Renderable, Updatable {
     }
 
     @Override
-    public void draw(Graphics2D g) {
-        g.drawImage(spaceShip, (int) x, (int) y, (int)width, (int)height, null);
-    }
-
-    @Override
     public int getLayer() {
         return layer;
     }
 
     @Override
     public void update() {
-        if(Input.keys[Input.RIGHT])
+        if(Input.keys[Input.RIGHT] && x <= Window.getWinWidth() - width)
             x += speed * FPS.getDeltaTime();
-        if (Input.keys[Input.LEFT])
+        if (Input.keys[Input.LEFT] && x >= 0)
             x -= speed * FPS.getDeltaTime();
-        if (Input.keys[Input.UP])
+        if (Input.keys[Input.UP] && y >= 0)
             y -= speed * FPS.getDeltaTime();
-        if (Input.keys[Input.DOWN])
+        if (Input.keys[Input.DOWN] && y <= Window.getWinHeight() - height)
             y += speed * FPS.getDeltaTime();
 
     }
