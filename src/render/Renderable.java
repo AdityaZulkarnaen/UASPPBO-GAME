@@ -11,7 +11,7 @@ public interface Renderable extends Comparable<Object>{
 
         if(getLayer() < object.getLayer())
             return -1;
-        if (getLayer() > object.getLayer())
+        else if (getLayer() > object.getLayer())
             return 1;
         else
             return 0;
