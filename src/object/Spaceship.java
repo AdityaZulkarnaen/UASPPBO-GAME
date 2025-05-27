@@ -2,16 +2,16 @@ package object;
 
 import core.FPS;
 import core.Input;
+import core.Timer;
 import core.Window;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import render.Renderable;
 import render.Renderer;
 import update.Updatable;
 import update.Updater;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 
 public class Spaceship implements Renderable, Updatable {
     public static double width = 75;
@@ -19,11 +19,14 @@ public class Spaceship implements Renderable, Updatable {
     private double x;
     private double y;
 
-    private int layer = 1;
+    private int layer = 2;
 
     private static BufferedImage spaceShip;
 
     private double speed = 200;
+
+    private static int shootTimerMillis = 500;
+    Timer timer = new Timer(shootTimerMillis);
 
     public Spaceship(double x, double y) throws Exception {
         this.x = x;
@@ -61,7 +64,7 @@ public class Spaceship implements Renderable, Updatable {
     }
 
     @Override
-    public void update() {
+    public void update() throws IOException {
         if(Input.keys[Input.RIGHT] && x <= Window.getWinWidth() - width)
             x += speed * FPS.getDeltaTime();
         if (Input.keys[Input.LEFT] && x >= 0)
@@ -70,6 +73,9 @@ public class Spaceship implements Renderable, Updatable {
             y -= speed * FPS.getDeltaTime();
         if (Input.keys[Input.DOWN] && y <= Window.getWinHeight() - height)
             y += speed * FPS.getDeltaTime();
-
+        if (Input.keys[Input.SPACE] && timer.isRinging()) {
+            new Bullet(x + (getWidth() / 2), y);
+            timer.resetTimer();
+        }
     }
 }
