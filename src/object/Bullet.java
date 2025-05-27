@@ -1,33 +1,37 @@
 package object;
 
-import core.FPS;
-import core.Window;
-import render.Renderable;
-import render.Renderer;
 import update.Updatable;
 import update.Updater;
 
-import javax.imageio.ImageIO;
+import render.Renderer;
+import render.Renderable;
+
+import core.Window;
+import core.FPS;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import javax.imageio.ImageIO;
 
-public class Background implements Renderable, Updatable {
-    private static double width = Window.getWinWidth();
-    private static double height = Window.getWinHeight();
-    private static double x;
+public class Bullet implements Updatable, Renderable {
+    private static double width = 30;
+    private static double height = 40;
+    private double x;
     private double y;
 
-    private final int layer = 0;
+    private final int layer = 1;
 
-    private static BufferedImage background;
+    private static BufferedImage bullet;
 
-    private double speed = 200;
+    private static double speed = 800;
 
-    public Background(double y) throws IOException{
+    public Bullet(double x, double y) throws IOException {
+        this.x = x - (getWidth() / 2);
         this.y = y;
 
-        background = ImageIO.read(new File("res/Space.png"));
+        bullet = ImageIO.read(new File("res/Bullet.png"));
+
         Renderer.addRenderableObject(this);
         Updater.addUpdatableObjects(this);
     }
@@ -59,15 +63,15 @@ public class Background implements Renderable, Updatable {
 
     @Override
     public BufferedImage getBufferedImage() {
-        return background;
+        return bullet;
     }
 
     @Override
     public void update() throws IOException {
-        y += speed * FPS.getDeltaTime();
-
-        if(y>=Window.getWinHeight()){
-            y= -Window.getWinHeight();
+        y -= speed * FPS.getDeltaTime();
+        if(y< -getHeight()){
+            Updater.removeUpdatable(this);
+            Renderer.removeRenderableObject(this);
         }
     }
 }

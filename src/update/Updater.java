@@ -1,5 +1,7 @@
 package update;
 
+import javax.imageio.IIOException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Updater {
@@ -7,7 +9,7 @@ public class Updater {
     private static ArrayList<Updatable> addUpdatableObjects = new ArrayList<Updatable>();
     private static ArrayList<Updatable> removeUpdatableObjects = new ArrayList<Updatable>();
 
-    public static void update() {
+    public static void update() throws IOException {
         for(Updatable object: updatableObjects)
             object.update();
 
