@@ -1,5 +1,6 @@
 package object;
 
+import core.Sound;
 import update.Updatable;
 import update.Updater;
 
@@ -13,6 +14,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Bullet implements Updatable, Renderable {
     private static double width = 30;
@@ -72,7 +75,7 @@ public class Bullet implements Updatable, Renderable {
     }
 
     @Override
-    public void update() throws IOException {
+    public void update() throws IOException, UnsupportedAudioFileException, LineUnavailableException {
         y -= speed * FPS.getDeltaTime();
         if(y< -getHeight()){
             Updater.removeUpdatable(this);
@@ -86,6 +89,8 @@ public class Bullet implements Updatable, Renderable {
 
             Updater.removeUpdatable(collidingObject);
             Renderer.removeRenderableObject(collidingObject.getRenderable());
+
+            Sound.playSound("res/crushed.wav");
         }
     }
 

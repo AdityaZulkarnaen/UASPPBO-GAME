@@ -6,8 +6,11 @@ import object.Spaceship;
 import render.Renderer;
 import update.Updater;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 public class Entry {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception, UnsupportedAudioFileException, LineUnavailableException {
         Window window = new Window("Space War", Window.getWinWidth(), Window.getWinHeight());
         Renderer renderer = new Renderer();
         Updater updater = new Updater();

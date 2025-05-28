@@ -1,6 +1,8 @@
 package update;
 
 import javax.imageio.IIOException;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -9,7 +11,7 @@ public class Updater {
     private static ArrayList<Updatable> addUpdatableObjects = new ArrayList<Updatable>();
     private static ArrayList<Updatable> removeUpdatableObjects = new ArrayList<Updatable>();
 
-    public static void update() throws IOException {
+    public static void update() throws IOException, UnsupportedAudioFileException, LineUnavailableException {
         for(Updatable object: updatableObjects)
             object.update();
 

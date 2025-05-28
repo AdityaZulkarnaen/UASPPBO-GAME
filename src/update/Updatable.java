@@ -2,12 +2,14 @@ package update;
 
 import render.Renderable;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public interface Updatable {
-    public void update() throws IOException;
+    public void update() throws IOException, UnsupportedAudioFileException, LineUnavailableException;
     public String getID();
     public Renderable getRenderable();
 
