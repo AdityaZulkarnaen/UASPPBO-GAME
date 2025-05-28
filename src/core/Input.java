@@ -10,8 +10,9 @@ public class Input implements KeyListener {
     public static final int UP = 2;
     public static final int DOWN = 3;
     public static final int SPACE = 4;
+    public static final int ENTER = 5;
 
-    public static boolean[] keys = new boolean[5];
+    public static boolean[] keys = new boolean[6];
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -35,7 +36,9 @@ public class Input implements KeyListener {
         else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             keys[SPACE] = true;
         }
-
+        else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            keys[ENTER] = true;
+        }
     }
 
     @Override
@@ -55,6 +58,8 @@ public class Input implements KeyListener {
         else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             keys[SPACE] = false;
         }
-
+        else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            keys[ENTER] = false;
+        }
     }
 }

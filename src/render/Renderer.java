@@ -28,6 +28,9 @@ public class Renderer extends JPanel {
         renderableObjects.remove(object);
     }
 
+    public static void clearAll() {
+        renderableObjects.clear();
+    }
 
     @Override
     public Dimension getPreferredSize() {
