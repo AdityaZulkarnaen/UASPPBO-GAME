@@ -42,7 +42,7 @@ public class Spaceship implements Renderable, Updatable {
 
     @Override
     public boolean drawCollisionBox() {
-        return true;
+        return false; // Changed from true to false
     }
 
     @Override

@@ -2,16 +2,15 @@ package object;
 
 import core.FPS;
 import core.Window;
-import render.Renderable;
-import render.Renderer;
-import update.Updatable;
-import update.Updater;
-
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
+import javax.imageio.ImageIO;
+import render.Renderable;
+import render.Renderer;
+import update.Updatable;
+import update.Updater;
 
 public class Asteroid implements Updatable, Renderable {
     private double width;
@@ -71,7 +70,7 @@ public class Asteroid implements Updatable, Renderable {
 
     @Override
     public boolean drawCollisionBox() {
-        return true;
+        return false; // Changed from true to false
     }
 
     @Override
