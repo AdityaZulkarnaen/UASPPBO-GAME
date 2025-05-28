@@ -27,6 +27,7 @@ public class Entry {
         new Background(-Window.getWinHeight());
         new AsteroidSpawner();
         new EnemySpawner(); // Add enemy spawner
+        new UI(); // Add UI for score display
 
         FPS.calcBeginTime();
         while (runGame) {

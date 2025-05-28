@@ -1,11 +1,10 @@
 package object;
 
 import core.Timer;
+import java.io.IOException;
 import render.Renderable;
 import update.Updatable;
 import update.Updater;
-
-import java.io.IOException;
 
 public class AsteroidSpawner implements Updatable {
     Timer timer = new Timer(1000);
