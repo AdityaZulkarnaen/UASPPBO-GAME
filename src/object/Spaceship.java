@@ -1,13 +1,14 @@
 package object;
 
-import core.FPS;
-import core.Input;
-import core.Timer;
-import core.Window;
+import core.*;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 import render.Renderable;
 import render.Renderer;
 import update.Updatable;
@@ -69,7 +70,7 @@ public class Spaceship implements Renderable, Updatable {
     }
 
     @Override
-    public void update() throws IOException {
+    public void update() throws IOException, UnsupportedAudioFileException, LineUnavailableException {
         if(Input.keys[Input.RIGHT] && x <= Window.getWinWidth() - width)
             x += speed * FPS.getDeltaTime();
         if (Input.keys[Input.LEFT] && x >= 0)
@@ -81,6 +82,8 @@ public class Spaceship implements Renderable, Updatable {
         if (Input.keys[Input.SPACE] && timer.isRinging()) {
             new Bullet(x + (getWidth() / 2), y);
             timer.resetTimer();
+
+            Sound.playSound("res/laser.wav");
         }
 
         Updatable collidingObject = isColliding(this, "asteroid");

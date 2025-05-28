@@ -1,39 +1,37 @@
 package object;
 
+import core.FPS;
 import core.Sound;
+import core.Window;
+import render.Renderable;
+import render.Renderer;
 import update.Updatable;
 import update.Updater;
 
-import render.Renderer;
-import render.Renderable;
-
-import core.Window;
-import core.FPS;
-
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
-public class Bullet implements Updatable, Renderable {
-    private static double width = 30;
-    private static double height = 40;
+public class EnemyBullet implements Updatable, Renderable {
+    private static double width = 20;
+    private static double height = 20;
     private double x;
     private double y;
 
     private final int layer = 1;
 
-    private static BufferedImage bullet;
+    private static BufferedImage enemyBullet;
 
-    private static double speed = 800;
+    private static double speed = 300;
 
-    public Bullet(double x, double y) throws IOException {
+    public EnemyBullet(double x, double y) throws IOException {
         this.x = x - (getWidth() / 2);
         this.y = y;
 
-        bullet = ImageIO.read(new File("res/Bullet.png"));
+        enemyBullet = ImageIO.read(new File("res/EnemyBullet.png"));
 
         Renderer.addRenderableObject(this);
         Updater.addUpdatableObjects(this);
@@ -71,19 +69,23 @@ public class Bullet implements Updatable, Renderable {
 
     @Override
     public BufferedImage getBufferedImage() {
-        return bullet;
+        return enemyBullet;
     }
 
     @Override
     public void update() throws IOException, UnsupportedAudioFileException, LineUnavailableException {
-        y -= speed * FPS.getDeltaTime();
-        if(y< -getHeight()){
+        y += speed * FPS.getDeltaTime(); // Move downward
+        
+        // Remove if off screen
+        if (y > Window.getWinHeight() + getHeight()) {
             Updater.removeUpdatable(this);
             Renderer.removeRenderableObject(this);
         }
 
-        Updatable collidingObject = isColliding(this, "asteroid");
+        // Check collision with player spaceship
+        Updatable collidingObject = isColliding(this, "spaceship");
         if (collidingObject != null) {
+            // Game Over - remove both objects
             Updater.removeUpdatable(this);
             Renderer.removeRenderableObject(this);
 
@@ -91,12 +93,15 @@ public class Bullet implements Updatable, Renderable {
             Renderer.removeRenderableObject(collidingObject.getRenderable());
 
             Sound.playSound("res/crushed.wav");
+            
+            // You can add game over logic here
+            System.out.println("Game Over! Enemy bullet hit the player!");
         }
     }
 
     @Override
     public String getID() {
-        return "bullet";
+        return "enemyBullet";
     }
 
     @Override
