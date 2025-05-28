@@ -1,14 +1,12 @@
 package object;
 
 import core.*;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-
 import render.Renderable;
 import render.Renderer;
 import update.Updatable;
@@ -88,12 +86,51 @@ public class Spaceship implements Renderable, Updatable {
 
         Updatable collidingObject = isColliding(this, "asteroid");
         if (collidingObject != null) {
-            Updater.removeUpdatable(this);
-            Renderer.removeRenderableObject(this);
-
-            Updater.removeUpdatable(collidingObject);
-            Renderer.removeRenderableObject(collidingObject.getRenderable());
+            handleGameOver();
         }
+
+        // Check collision with enemy bullets
+        Updatable collidingEnemyBullet = isColliding(this, "enemyBullet");
+        if (collidingEnemyBullet != null) {
+            handleGameOver();
+        }
+
+        // Check collision with enemy ships
+        Updatable collidingEnemy = isColliding(this, "enemy");
+        if (collidingEnemy != null) {
+            handleGameOver();
+        }
+    }
+
+    private void handleGameOver() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+        // Save high score and reset game
+        Score.gameOver();
+        
+        Updater.removeUpdatable(this);
+        Renderer.removeRenderableObject(this);
+
+        Sound.playSound("res/crushed.wav");
+        
+        System.out.println("Game Over! Final Score: " + Score.getCurrentScore());
+        System.out.println("High Scores:");
+        for (int i = 0; i < Math.min(5, Score.getHighScores().size()); i++) {
+            System.out.println((i + 1) + ". " + Score.getHighScores().get(i));
+        }
+        
+        // Reset the game
+        Score.resetGame();
+        
+        // Restart the game after a short delay
+        new java.util.Timer().schedule(new java.util.TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    new Spaceship(Window.getWinWidth() / 2 - (Spaceship.width / 2), Window.getWinHeight() - 150);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, 2000); // 2 second delay
     }
 
     @Override

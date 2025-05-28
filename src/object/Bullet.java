@@ -1,21 +1,18 @@
 package object;
 
-import core.Sound;
-import update.Updatable;
-import update.Updater;
-
-import render.Renderer;
-import render.Renderable;
-
-import core.Window;
 import core.FPS;
-
+import core.Score;
+import core.Sound;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import render.Renderable;
+import render.Renderer;
+import update.Updatable;
+import update.Updater;
 
 public class Bullet implements Updatable, Renderable {
     private static double width = 30;
@@ -89,6 +86,24 @@ public class Bullet implements Updatable, Renderable {
 
             Updater.removeUpdatable(collidingObject);
             Renderer.removeRenderableObject(collidingObject.getRenderable());
+
+            // Add score for destroying asteroid
+            Score.addScore(100);
+
+            Sound.playSound("res/crushed.wav");
+        }
+
+        // Check collision with enemy spaceships
+        Updatable collidingEnemy = isColliding(this, "enemy");
+        if (collidingEnemy != null) {
+            Updater.removeUpdatable(this);
+            Renderer.removeRenderableObject(this);
+
+            Updater.removeUpdatable(collidingEnemy);
+            Renderer.removeRenderableObject(collidingEnemy.getRenderable());
+
+            // Add score for destroying enemy
+            Score.addScore(200);
 
             Sound.playSound("res/crushed.wav");
         }
