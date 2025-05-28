@@ -1,13 +1,13 @@
 package core;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import object.AsteroidSpawner;
 import object.Background;
+import object.EnemySpawner;
 import object.Spaceship;
 import render.Renderer;
 import update.Updater;
-
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Entry {
     public static void main(String[] args) throws Exception, UnsupportedAudioFileException, LineUnavailableException {
@@ -26,6 +26,7 @@ public class Entry {
         new Background(0);
         new Background(-Window.getWinHeight());
         new AsteroidSpawner();
+        new EnemySpawner(); // Add enemy spawner
 
         FPS.calcBeginTime();
         while (runGame) {

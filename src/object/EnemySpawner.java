@@ -6,18 +6,23 @@ import update.Updatable;
 import update.Updater;
 
 import java.io.IOException;
+import java.util.Random;
 
-public class AsteroidSpawner implements Updatable {
-    Timer timer = new Timer(1000);
+public class EnemySpawner implements Updatable {
+    Timer timer = new Timer(3000); // Spawn every 3 seconds
+    Random rand = new Random();
 
-    public AsteroidSpawner() {
+    public EnemySpawner() {
         Updater.addUpdatableObjects(this);
     }
 
     @Override
     public void update() throws IOException {
-        if (timer.isRinging()){
-            new Asteroid();
+        if (timer.isRinging()) {
+            // 70% chance to spawn an enemy
+            if (rand.nextFloat() < 0.7f) {
+                new EnemySpaceship();
+            }
             timer.resetTimer();
         }
     }
