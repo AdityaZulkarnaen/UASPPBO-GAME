@@ -22,7 +22,7 @@ public class Spaceship implements Renderable, Updatable {
 
     private static BufferedImage spaceShip;
 
-    private double speed = 200;
+    private double speed = 400;
 
     private static int shootTimerMillis = 500;
     Timer timer = new Timer(shootTimerMillis);
@@ -86,51 +86,30 @@ public class Spaceship implements Renderable, Updatable {
 
         Updatable collidingObject = isColliding(this, "asteroid");
         if (collidingObject != null) {
+            Sound.playSound("res/dead.wav");
             handleGameOver();
         }
 
         // Check collision with enemy bullets
         Updatable collidingEnemyBullet = isColliding(this, "enemyBullet");
         if (collidingEnemyBullet != null) {
+            Sound.playSound("res/dead.wav");
             handleGameOver();
         }
 
         // Check collision with enemy ships
         Updatable collidingEnemy = isColliding(this, "enemy");
         if (collidingEnemy != null) {
+            Sound.playSound("res/dead.wav");
             handleGameOver();
         }
     }
 
     private void handleGameOver() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        // Save high score and reset game
-        Score.gameOver();
-        
         Updater.removeUpdatable(this);
         Renderer.removeRenderableObject(this);
-
-        Sound.playSound("res/crushed.wav");
         
-        System.out.println("Game Over! Final Score: " + Score.getCurrentScore());
-        System.out.println("High Scores:");
-        for (int i = 0; i < Math.min(5, Score.getHighScores().size()); i++) {
-            System.out.println((i + 1) + ". " + Score.getHighScores().get(i));
-        }
-        
-        // Reset the game
-        Score.resetGame();
-        
-        // Restart the game after a short delay
-        new java.util.Timer().schedule(new java.util.TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    new Spaceship(Window.getWinWidth() / 2 - (Spaceship.width / 2), Window.getWinHeight() - 150);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }, 2000); // 2 second delay
+        GameManager.handleGameOver();
     }
 
     @Override

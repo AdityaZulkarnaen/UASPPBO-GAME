@@ -1,6 +1,7 @@
 package object;
 
 import core.FPS;
+import core.Sound;
 import core.Timer;
 import core.Window;
 import render.Renderable;
@@ -9,6 +10,8 @@ import update.Updatable;
 import update.Updater;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -85,7 +88,7 @@ public class EnemySpaceship implements Renderable, Updatable {
     }
 
     @Override
-    public void update() throws IOException {
+    public void update() throws IOException, UnsupportedAudioFileException, LineUnavailableException {
         // Movement patterns
         switch (movementPattern) {
             case 0: // Straight down
@@ -130,6 +133,7 @@ public class EnemySpaceship implements Renderable, Updatable {
         if (collidingBullet != null) {
             Updater.removeUpdatable(this);
             Renderer.removeRenderableObject(this);
+            Sound.playSound("res/EnemyDeath.wav");
             
             Updater.removeUpdatable(collidingBullet);
             Renderer.removeRenderableObject(collidingBullet.getRenderable());
