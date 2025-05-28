@@ -70,6 +70,11 @@ public class Asteroid implements Updatable, Renderable {
     }
 
     @Override
+    public boolean drawCollisionBox() {
+        return true;
+    }
+
+    @Override
     public BufferedImage getBufferedImage() {
         return asteroid;
     }
@@ -82,5 +87,15 @@ public class Asteroid implements Updatable, Renderable {
             Updater.removeUpdatable(this);
             Renderer.removeRenderableObject(this);
         }
+    }
+
+    @Override
+    public String getID() {
+        return "asteroid";
+    }
+
+    @Override
+    public Renderable getRenderable() {
+        return this;
     }
 }

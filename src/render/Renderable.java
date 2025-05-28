@@ -9,10 +9,15 @@ public interface Renderable extends Comparable{
     public double getY();
     public double getWidth();
     public double getHeight();
+    public boolean drawCollisionBox();
     public BufferedImage getBufferedImage();
 
     public default void drawSprite(Graphics2D g) {
         g.drawImage(getBufferedImage(), (int)getX(), (int)getY(), (int)getWidth(), (int)getHeight(), null);
+
+        if (drawCollisionBox()) {
+            g.drawRect((int)getX(), (int)getY(), (int)getWidth(), (int)getHeight());
+        }
     }
 
     public default int compareTo(Object o) {

@@ -21,9 +21,14 @@ public class Updater {
     }
 
     public static void addUpdatableObjects(Updatable object) {
+
         addUpdatableObjects.add(object);
     }
     public static void removeUpdatable(Updatable object) {
+
         removeUpdatableObjects.add(object);
+    }
+    public static ArrayList<Updatable> getUpdatableObjects() {
+        return updatableObjects;
     }
 }

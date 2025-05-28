@@ -42,6 +42,11 @@ public class Spaceship implements Renderable, Updatable {
     }
 
     @Override
+    public boolean drawCollisionBox() {
+        return true;
+    }
+
+    @Override
     public BufferedImage getBufferedImage() {
         return spaceShip;
     }
@@ -77,5 +82,24 @@ public class Spaceship implements Renderable, Updatable {
             new Bullet(x + (getWidth() / 2), y);
             timer.resetTimer();
         }
+
+        Updatable collidingObject = isColliding(this, "asteroid");
+        if (collidingObject != null) {
+            Updater.removeUpdatable(this);
+            Renderer.removeRenderableObject(this);
+
+            Updater.removeUpdatable(collidingObject);
+            Renderer.removeRenderableObject(collidingObject.getRenderable());
+        }
+    }
+
+    @Override
+    public String getID() {
+        return "spaceship";
+    }
+
+    @Override
+    public Renderable getRenderable() {
+        return this;
     }
 }

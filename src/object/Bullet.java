@@ -62,6 +62,11 @@ public class Bullet implements Updatable, Renderable {
     }
 
     @Override
+    public boolean drawCollisionBox() {
+        return true;
+    }
+
+    @Override
     public BufferedImage getBufferedImage() {
         return bullet;
     }
@@ -73,5 +78,24 @@ public class Bullet implements Updatable, Renderable {
             Updater.removeUpdatable(this);
             Renderer.removeRenderableObject(this);
         }
+
+        Updatable collidingObject = isColliding(this, "asteroid");
+        if (collidingObject != null) {
+            Updater.removeUpdatable(this);
+            Renderer.removeRenderableObject(this);
+
+            Updater.removeUpdatable(collidingObject);
+            Renderer.removeRenderableObject(collidingObject.getRenderable());
+        }
+    }
+
+    @Override
+    public String getID() {
+        return "bullet";
+    }
+
+    @Override
+    public Renderable getRenderable() {
+        return this;
     }
 }
