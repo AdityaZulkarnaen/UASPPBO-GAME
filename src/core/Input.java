@@ -11,8 +11,9 @@ public class Input implements KeyListener {
     public static final int DOWN = 3;
     public static final int SPACE = 4;
     public static final int ENTER = 5;
+    public static final int ESC = 6; // Add ESC key
 
-    public static boolean[] keys = new boolean[6];
+    public static boolean[] keys = new boolean[7]; // Increase array size
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -39,6 +40,9 @@ public class Input implements KeyListener {
         else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             keys[ENTER] = true;
         }
+        else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) { // Add ESC key handling
+            keys[ESC] = true;
+        }
     }
 
     @Override
@@ -60,6 +64,9 @@ public class Input implements KeyListener {
         }
         else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             keys[ENTER] = false;
+        }
+        else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) { // Add ESC key handling
+            keys[ESC] = false;
         }
     }
 }

@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 public class UI implements Renderable {
     private final int layer = 100; // High layer to render on top
     private static boolean gameOver = false;
+    private static boolean gamePaused = false; // Add pause state
 
     public UI() {
         Renderer.addRenderableObject(this);
@@ -20,6 +21,14 @@ public class UI implements Renderable {
 
     public static boolean isGameOver() {
         return gameOver;
+    }
+
+    public static void setGamePaused(boolean paused) {
+        UI.gamePaused = paused;
+    }
+
+    public static boolean isGamePaused() {
+        return gamePaused;
     }
 
     @Override
@@ -92,6 +101,30 @@ public class UI implements Renderable {
             g.drawString(restartText, 
                 (int)(Window.getWinWidth() - textWidth) / 2, 
                 (int)Window.getWinHeight() / 2 + 50);
+        } else if (gamePaused) {
+            // Draw pause screen
+            g.setColor(new Color(0, 0, 0, 100));
+            g.fillRect(0, 0, (int)Window.getWinWidth(), (int)Window.getWinHeight());
+            
+            // Draw PAUSED text
+            g.setFont(new Font("Arial", Font.BOLD, 48));
+            g.setColor(Color.YELLOW);
+            FontMetrics fm = g.getFontMetrics();
+            String pausedText = "PAUSED";
+            int textWidth = fm.stringWidth(pausedText);
+            g.drawString(pausedText, 
+                (int)(Window.getWinWidth() - textWidth) / 2, 
+                (int)Window.getWinHeight() / 2 - 25);
+            
+            // Draw resume instruction
+            g.setFont(new Font("Arial", Font.BOLD, 20));
+            g.setColor(Color.WHITE);
+            fm = g.getFontMetrics();
+            String resumeText = "Press ESC to resume";
+            textWidth = fm.stringWidth(resumeText);
+            g.drawString(resumeText, 
+                (int)(Window.getWinWidth() - textWidth) / 2, 
+                (int)Window.getWinHeight() / 2 + 25);
         } else {
             // Normal UI display
             g.setFont(new Font("Arial", Font.BOLD, 16));
@@ -113,6 +146,9 @@ public class UI implements Renderable {
             
             // Draw high score
             g.drawString("High Score: " + Score.getHighScore(), 10, 85);
+            
+            // Draw pause instruction
+            g.drawString("Press ESC to pause", 10, 105);
         }
     }
 }
