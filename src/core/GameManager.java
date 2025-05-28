@@ -10,18 +10,30 @@ import java.io.IOException;
 
 public class GameManager {
     private static boolean gameRunning = true;
+    private static boolean gamePaused = false; // Add pause state
     private static boolean enterPressed = false;
+    private static boolean escPressed = false; // Add ESC key state tracking
 
     public static void setGameRunning(boolean running) {
         gameRunning = running;
     }
 
     public static boolean isGameRunning() {
-        return gameRunning;
+        return gameRunning && !gamePaused; // Game runs only if not paused
+    }
+
+    public static boolean isGamePaused() {
+        return gamePaused;
+    }
+
+    public static void setGamePaused(boolean paused) {
+        gamePaused = paused;
+        UI.setGamePaused(paused); // Update UI to show pause state
     }
 
     public static void handleGameOver() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         gameRunning = false;
+        gamePaused = false; // Reset pause state when game over
         UI.setGameOver(true);
         
         // Save high score
@@ -37,6 +49,7 @@ public class GameManager {
     }
 
     public static void checkRestart() throws Exception {
+        // Handle restart when game is over
         if (!gameRunning && Input.keys[Input.ENTER] && !enterPressed) {
             enterPressed = true;
             restartGame();
@@ -45,6 +58,22 @@ public class GameManager {
         if (!Input.keys[Input.ENTER]) {
             enterPressed = false;
         }
+
+        // Handle pause/unpause when game is running
+        if (gameRunning && Input.keys[Input.ESC] && !escPressed) {
+            escPressed = true;
+            togglePause();
+        }
+        
+        if (!Input.keys[Input.ESC]) {
+            escPressed = false;
+        }
+    }
+
+    private static void togglePause() {
+        gamePaused = !gamePaused;
+        UI.setGamePaused(gamePaused);
+        System.out.println(gamePaused ? "Game Paused" : "Game Resumed");
     }
 
     private static void restartGame() throws Exception {
@@ -54,7 +83,9 @@ public class GameManager {
         
         // Reset game state
         gameRunning = true;
+        gamePaused = false; // Reset pause state
         UI.setGameOver(false);
+        UI.setGamePaused(false); // Reset pause UI
         Score.resetGame();
         
         // Recreate game objects
