@@ -79,7 +79,7 @@ public class EnemySpaceship implements Renderable, Updatable {
 
     @Override
     public boolean drawCollisionBox() {
-        return true;
+        return false; // Changed from true to false
     }
 
     @Override
@@ -119,6 +119,7 @@ public class EnemySpaceship implements Renderable, Updatable {
         // Shooting logic
         if (shootTimer.isRinging() && y > 0 && y < Window.getWinHeight() - 100) {
             new EnemyBullet(x + (getWidth() / 2), y + getHeight());
+            Sound.playSound("res/laser2.wav");
             shootTimer.resetTimer();
         }
 
