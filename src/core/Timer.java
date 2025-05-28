@@ -1,5 +1,6 @@
 package core;
 
+import render.Renderable;
 import update.Updatable;
 import update.Updater;
 
@@ -18,6 +19,16 @@ public class Timer implements Updatable {
     @Override
     public void update() throws IOException {
         setMillisTime -= FPS.getDeltaTime() * 1000;
+    }
+
+    @Override
+    public String getID() {
+        return null;
+    }
+
+    @Override
+    public Renderable getRenderable() {
+        return null;
     }
 
     public boolean isRinging(){

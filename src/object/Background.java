@@ -58,6 +58,11 @@ public class Background implements Renderable, Updatable {
     }
 
     @Override
+    public boolean drawCollisionBox() {
+        return false;
+    }
+
+    @Override
     public BufferedImage getBufferedImage() {
         return background;
     }
@@ -69,5 +74,15 @@ public class Background implements Renderable, Updatable {
         if(y>=Window.getWinHeight()){
             y= -Window.getWinHeight();
         }
+    }
+
+    @Override
+    public String getID() {
+        return null;
+    }
+
+    @Override
+    public Renderable getRenderable() {
+        return null;
     }
 }
