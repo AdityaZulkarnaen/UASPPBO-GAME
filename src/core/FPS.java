@@ -4,8 +4,6 @@ import java.time.Duration;
 import java.time.Instant;
 
 public class FPS {
-    private FPS() {};
-
     private static Duration fpsDeltatime = Duration.ZERO;
     private static Duration lastTime = Duration.ZERO;
     private static Instant beginTime = Instant.now();

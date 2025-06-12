@@ -7,11 +7,21 @@ import update.Updatable;
 import update.Updater;
 
 public class AsteroidSpawner implements Updatable {
-    Timer timer = new Timer(1000);
+    private static int speed=1000;
+    static Timer timer = new Timer(speed);
 
     public AsteroidSpawner() {
         Updater.addUpdatableObjects(this);
     }
+
+    public static void minSpeed() {
+        AsteroidSpawner.speed -= 200; // Decrease the timer to increase spawning rate
+        if (AsteroidSpawner.speed < 300) {
+            AsteroidSpawner.speed = 300; // Set a minimum speed to avoid too fast spawning
+        }
+        timer.setAgain(speed);
+    }
+
 
     @Override
     public void update() throws IOException {

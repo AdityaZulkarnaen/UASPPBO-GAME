@@ -16,6 +16,10 @@ public class Timer implements Updatable {
         Updater.addUpdatableObjects(this);
     }
 
+    public void setAgain(int setMillisTime) {
+        this.setMillisTime = setMillisTime;
+    }
+
     @Override
     public void update() throws IOException {
         setMillisTime -= FPS.getDeltaTime() * 1000;

@@ -1,6 +1,7 @@
 package object;
 
 import core.FPS;
+import core.GameManager;
 import core.Sound;
 import core.Window;
 import render.Renderable;
@@ -25,7 +26,7 @@ public class EnemyBullet implements Updatable, Renderable {
 
     private static BufferedImage enemyBullet;
 
-    private static double speed = 300;
+    private static double speed = 200;
 
     public EnemyBullet(double x, double y) throws IOException {
         this.x = x - (getWidth() / 2);
@@ -96,6 +97,18 @@ public class EnemyBullet implements Updatable, Renderable {
             
             // You can add game over logic here
             System.out.println("Game Over! Enemy bullet hit the player!");
+            GameManager.handleGameOver();
+        }
+        Updatable collidingBullet = isColliding(this, "bullet");
+        if (collidingBullet != null) {
+            // Remove both enemy bullet and player's bullet
+            Updater.removeUpdatable(this);
+            Renderer.removeRenderableObject(this);
+
+            Updater.removeUpdatable(collidingBullet);
+            Renderer.removeRenderableObject(collidingBullet.getRenderable());
+
+            Sound.playSound("res/EnemyDeath.wav");
         }
     }
 

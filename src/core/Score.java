@@ -4,6 +4,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import object.AsteroidSpawner;
+import object.Spaceship;
+
 public class Score {
     private static int currentScore = 0;
     private static int currentLevel = 1;
@@ -26,6 +29,8 @@ public class Score {
         if (currentLevel < 5 && currentScore >= scoreToNextLevel) {
             currentLevel++;
             scoreToNextLevel = baseScorePerLevel * currentLevel;
+            AsteroidSpawner.minSpeed();
+            Spaceship.minSpeed();
             System.out.println("Level Up! Now at Level " + currentLevel);
         }
     }
