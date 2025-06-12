@@ -3,7 +3,7 @@ package render;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public interface Renderable extends Comparable{
+public interface Renderable extends Comparable<Object> {
     public int getLayer();
     public double getX();
     public double getY();

@@ -1,15 +1,43 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+import core.FPS;
+import core.Input;
+import core.UI;
+import core.Window;
+import object.AsteroidSpawner;
+import object.Background;
+import object.EnemySpawner;
+import object.Spaceship;
+import render.Renderer;
+import update.Updater;
+
+public class Main {
+    public static void main(String[] args) throws Exception, UnsupportedAudioFileException, LineUnavailableException {
+        Window window = new Window("Space War", Window.getWinWidth(), Window.getWinHeight());
+        Renderer renderer = new Renderer();
+
+        window.addKeyListener(new Input());
+        window.add(renderer);
+        window.packWindow();
+        window.setVisible(true);
+
+        boolean runGame = true;
+
+        new Spaceship(Window.getWinWidth() / 2 - (Spaceship.width / 2),Window.getWinHeight() - 150);
+        new Background(0);
+        new Background(-Window.getWinHeight());
+        new AsteroidSpawner();
+        new EnemySpawner(); // Add enemy spawner
+        new UI(); // Add UI for score display
+
+        FPS.calcBeginTime();
+        while (runGame) {
+            Updater.update();
+            renderer.repaint();
+            //recalculate delta time
+            FPS.calcDeltaTime();
         }
+
     }
 }
