@@ -1,6 +1,7 @@
 package object;
 
 import core.FPS;
+import core.GameManager;
 import core.Sound;
 import core.Window;
 import render.Renderable;
@@ -96,6 +97,8 @@ public class EnemyBullet implements Updatable, Renderable {
             
             // You can add game over logic here
             System.out.println("Game Over! Enemy bullet hit the player!");
+            try {Sound.playSound("res/dead.wav");} catch(Exception e) {}
+            GameManager.handleGameOver();
         }
     }
 

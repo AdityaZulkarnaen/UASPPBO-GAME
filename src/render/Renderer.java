@@ -15,8 +15,10 @@ public class Renderer extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
-        for(Renderable object: renderableObjects)
-            object.drawSprite(g2d);
+
+        try {for(Renderable object: renderableObjects)
+            object.drawSprite(g2d);} catch(Exception e) {}
+
     }
 
     public static void addRenderableObject(Renderable object) {
