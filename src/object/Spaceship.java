@@ -25,7 +25,7 @@ public class Spaceship implements Renderable, Updatable {
     private static double speed = 400;
 
     private static int shootTimerMillis = 500;
-    static Timer timer = new Timer(shootTimerMillis);
+    Timer timer = new Timer(shootTimerMillis);
 
     public Spaceship(double x, double y) throws Exception {
         this.x = x;
@@ -34,17 +34,6 @@ public class Spaceship implements Renderable, Updatable {
         spaceShip = ImageIO.read(new File("res/Spaceships.png"));
         Renderer.addRenderableObject(this);
         Updater.addUpdatableObjects(this);
-    }
-
-    public static void minSpeed() {
-        if (speed<800) {
-            speed += 50; // Increase speed to make the game more challenging
-        }
-        if (shootTimerMillis > 200) {
-            shootTimerMillis -= 50; // Decrease the timer to increase firing rate
-            // Reset the timer with the new value
-            timer.setAgain(shootTimerMillis);
-        }
     }
 
     public double getHeight() {
