@@ -13,14 +13,14 @@ import update.Updatable;
 import update.Updater;
 
 public class Spaceship implements Renderable, Updatable {
-    public static double width = 75;
-    private static double height = 75;
+    private double width = 75;
+    private double height = 75;
     private double x;
     private double y;
 
     private int layer = 2;
 
-    private static BufferedImage spaceShip;
+    private BufferedImage spaceShip;
 
     private double speed = 400;
 

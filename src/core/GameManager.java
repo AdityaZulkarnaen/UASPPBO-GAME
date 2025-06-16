@@ -120,7 +120,7 @@ public class GameManager {
         Updater.clearAll();
         Renderer.clearAll();
 
-        new Spaceship(Window.getWinWidth() / 2 - (Spaceship.width / 2), Window.getWinHeight() - 150);
+        new Spaceship(Window.getWinWidth() / 2 - (75 / 2), Window.getWinHeight() - 150);
         new Background(0);
         new Background(-Window.getWinHeight());
         new AsteroidSpawner();
