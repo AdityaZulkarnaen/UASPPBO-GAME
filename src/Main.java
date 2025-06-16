@@ -19,6 +19,8 @@ public class Main {
         window.packWindow();
         window.setVisible(true);
 
+
+        //inisialisasi game
         GameManager.initializeGame();
 
         // Mulai loop game
