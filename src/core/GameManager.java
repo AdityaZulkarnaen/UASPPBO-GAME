@@ -98,6 +98,7 @@ public class GameManager {
 
     private static void restartGame() throws Exception {
         System.out.println("Restarting game...");
+        Input.resetKeys();
         UI.setGameOver(false);
         initializeGame();
         gameRunning = true;

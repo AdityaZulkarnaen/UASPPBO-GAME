@@ -1,6 +1,6 @@
 Player,3400
 fira,2400
- n,2200
+n,2200
 giono,1800
 giono,1800
 Zan,1800

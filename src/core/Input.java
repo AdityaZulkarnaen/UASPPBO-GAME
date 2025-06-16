@@ -69,4 +69,10 @@ public class Input implements KeyListener {
             keys[ESC] = false;
         }
     }
+
+    public static void resetKeys() {
+        for (int i = 0; i < keys.length; i++) {
+            keys[i] = false;
+        }
+    }
 }
