@@ -4,15 +4,15 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
-
 public class Score {
     private static int currentScore = 0;
     private static int currentLevel = 1;
-    private static int scoreToNextLevel = 1000; // Score needed to advance to next level
+    private static int scoreToNextLevel = 1000;
     private static int baseScorePerLevel = 1000;
-    private static ArrayList<Integer> highScores = new ArrayList<>();
+    private static ArrayList<HighScoreEntry> highScores = new ArrayList<>();
     private static final String HIGHSCORE_FILE = "highscores.txt";
     private static final int MAX_HIGHSCORES = 10;
+    private static final String DELIMITER = ",";
 
     static {
         loadHighScores();
@@ -37,48 +37,56 @@ public class Score {
         scoreToNextLevel = baseScorePerLevel;
     }
 
-    public static void gameOver() {
+
+    public static void gameOver(String playerName) {
         if (currentScore > 0) {
-            addHighScore(currentScore);
+            addHighScore(playerName, currentScore);
             saveHighScores();
         }
     }
 
-    private static void addHighScore(int score) {
-        highScores.add(score);
-        Collections.sort(highScores, Collections.reverseOrder());
+    private static void addHighScore(String playerName, int score) {
+        highScores.add(new HighScoreEntry(playerName, score));
+        Collections.sort(highScores);
         if (highScores.size() > MAX_HIGHSCORES) {
             highScores.remove(highScores.size() - 1);
         }
     }
 
     private static void loadHighScores() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(HIGHSCORE_FILE))) {
+        highScores.clear();
+         try (BufferedReader reader = new BufferedReader(new FileReader(HIGHSCORE_FILE))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                try {
-                    highScores.add(Integer.parseInt(line.trim()));
-                } catch (NumberFormatException e) {
-                    // Skip invalid lines
+                String[] parts = line.split(DELIMITER);
+                if (parts.length == 2) {
+                    try {
+                        String name = parts[0].trim();
+                        int score = Integer.parseInt(parts[1].trim());
+                        highScores.add(new HighScoreEntry(name, score));
+                    } catch (NumberFormatException e) {
+                        System.err.println("Skipping malformed high score line (score not a number): " + line);
+                    }
+                } else {
+                    System.err.println("Skipping malformed high score line (wrong format): " + line);
                 }
             }
-            Collections.sort(highScores, Collections.reverseOrder());
+            Collections.sort(highScores);
         } catch (IOException e) {
-            // File doesn't exist or can't be read, start with empty list
+            System.out.println("High score file not found or could not be read. Starting with empty high scores.");
         }
     }
 
     private static void saveHighScores() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(HIGHSCORE_FILE))) {
-            for (int score : highScores) {
-                writer.println(score);
+            for (HighScoreEntry entry : highScores) {
+                writer.println(entry.getPlayerName() + DELIMITER + entry.getScore());
             }
         } catch (IOException e) {
             System.err.println("Could not save high scores: " + e.getMessage());
         }
     }
 
-    // Getters
     public static int getCurrentScore() {
         return currentScore;
     }
@@ -91,7 +99,7 @@ public class Score {
         return scoreToNextLevel;
     }
 
-    public static ArrayList<Integer> getHighScores() {
+    public static ArrayList<HighScoreEntry> getHighScores() {
         return new ArrayList<>(highScores);
     }
 
@@ -100,6 +108,10 @@ public class Score {
     }
 
     public static int getHighScore() {
-        return highScores.isEmpty() ? 0 : highScores.get(0);
+        return highScores.isEmpty() ? 0 : highScores.get(0).getScore();
+    }
+
+    public static HighScoreEntry getTopHighScoreEntry() {
+        return highScores.isEmpty() ? null : highScores.get(0);
     }
 }
