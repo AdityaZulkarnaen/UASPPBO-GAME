@@ -7,76 +7,35 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import render.Renderable;
 import render.Renderer;
 import update.Updatable;
 import update.Updater;
 
-public class Spaceship implements Renderable, Updatable {
-    private double width = 75;
-    private double height = 75;
-    private double x;
-    private double y;
-
-    private int layer = 2;
-
-    private BufferedImage spaceShip;
-
-    private double speed = 400;
-
+public class Spaceship extends UpdatableRenderableObj {
     private int shootTimerMillis = 500;
     Timer timer = new Timer(shootTimerMillis);
-
+    
     public Spaceship(double x, double y) throws Exception {
-        this.x = x;
-        this.y = y;
+        BufferedImage spaceShip = ImageIO.read(new File("res/Spaceships.png"));
+        addData("spaceship", x, y, 75, 75, 2, 400, spaceShip);
 
-        spaceShip = ImageIO.read(new File("res/Spaceships.png"));
         Renderer.addRenderableObject(this);
         Updater.addUpdatableObjects(this);
     }
 
-
-    public double getHeight() {
-        return height;
-    }
-
-    @Override
-    public BufferedImage getBufferedImage() {
-        return spaceShip;
-    }
-
-    public double getWidth() {
-        return width;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    @Override
-    public int getLayer() {
-        return layer;
-    }
-
     @Override
     public void update() throws IOException, UnsupportedAudioFileException, LineUnavailableException {
-        if(Input.keys[Input.RIGHT] && x <= Window.getWinWidth() - width)
-            x += speed * FPS.getDeltaTime();
-        if (Input.keys[Input.LEFT] && x >= 0)
-            x -= speed * FPS.getDeltaTime();
-        if (Input.keys[Input.UP] && y >= 0)
-            y -= speed * FPS.getDeltaTime();
-        if (Input.keys[Input.DOWN] && y <= Window.getWinHeight() - height)
-            y += speed * FPS.getDeltaTime();
+        if(Input.keys[Input.RIGHT] && getX() <= Window.getWinWidth() - getWidth())
+            ChangeX(getX() + getSpeed() * FPS.getDeltaTime());
+        if (Input.keys[Input.LEFT] && getX() >= 0)
+            ChangeX(getX() - getSpeed() * FPS.getDeltaTime());
+        if (Input.keys[Input.UP] && getY() >= 0)
+            ChangeY(getY() - getSpeed() * FPS.getDeltaTime());
+        if (Input.keys[Input.DOWN] && getY() <= Window.getWinHeight() - getHeight())
+            ChangeY(getY() + getSpeed() * FPS.getDeltaTime());
         if (Input.keys[Input.SPACE] && timer.isRinging()) {
-            new Bullet(x + (getWidth() / 2), y);
+            new Bullet(getX() + (getWidth() / 2), getY());
             timer.resetTimer();
-
             Sound.playSound("res/laser.wav");
         }
 
@@ -106,15 +65,5 @@ public class Spaceship implements Renderable, Updatable {
         Renderer.removeRenderableObject(this);
         
         GameManager.handleGameOver();
-    }
-
-    @Override
-    public String getID() {
-        return "spaceship";
-    }
-
-    @Override
-    public Renderable getRenderable() {
-        return this;
     }
 }

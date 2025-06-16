@@ -1,6 +1,5 @@
 package object;
 
-import core.FPS;
 import core.Window;
 import java.io.File;
 import java.io.IOException;
@@ -21,19 +20,5 @@ public class Asteroid extends UpdatableRenderableObj {
 
         Renderer.addRenderableObject(this);
         Updater.addUpdatableObjects(this);
-    }
-    @Override
-    public void update() {
-        ChangeY(getY() + getSpeed() * FPS.getDeltaTime());
-
-        if(getY() >= Window.getWinHeight()){
-            Updater.removeUpdatable(this);
-            Renderer.removeRenderableObject(this);
-        }
-        if(getX() < 0) {
-            ChangeX(0);
-        } else if(getX() + getWidth() > Window.getWinWidth()) {
-            ChangeX(Window.getWinWidth() - getWidth());
-        }
     }
 }

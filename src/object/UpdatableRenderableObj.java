@@ -1,6 +1,10 @@
 package object;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import core.FPS;
 import core.Window;
@@ -27,12 +31,17 @@ public class UpdatableRenderableObj implements Updatable, Renderable {
     }
 
     @Override
-    public void update() { // Default update method
+    public void update() throws IOException, UnsupportedAudioFileException, LineUnavailableException { // Default update method
         y += speed* FPS.getDeltaTime();
 
         if(y >= Window.getWinHeight()){
             Updater.removeUpdatable(this);
             Renderer.removeRenderableObject(this);
+        }
+        if(getX() < 0) {
+            ChangeX(0);
+        } else if(getX() + getWidth() > Window.getWinWidth()) {
+            ChangeX(Window.getWinWidth() - getWidth());
         }
     }   
 
@@ -44,6 +53,12 @@ public class UpdatableRenderableObj implements Updatable, Renderable {
     @Override
     public Renderable getRenderable() {
         return this;
+    }
+    public Renderable getRenderable(String id) {
+        if (this.id.equals(id)) {
+            return this;
+        }
+        return null;
     }
 
     @Override
@@ -86,5 +101,4 @@ public class UpdatableRenderableObj implements Updatable, Renderable {
     protected void ChangeY(double y) {
         this.y = y;
     }
-
 }

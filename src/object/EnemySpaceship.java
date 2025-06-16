@@ -4,7 +4,6 @@ import core.FPS;
 import core.Sound;
 import core.Timer;
 import core.Window;
-import render.Renderable;
 import render.Renderer;
 import update.Updatable;
 import update.Updater;
@@ -17,17 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
-public class EnemySpaceship implements Renderable, Updatable {
-    private static double width = 60;
-    private static double height = 60;
-    private double x;
-    private double y;
-
-    private final int layer = 2;
-
-    private static BufferedImage enemyShip;
-
-    private double speed = 100;
+public class EnemySpaceship extends UpdatableRenderableObj {
     private double direction = 1; // 1 for right, -1 for left
     private int movementPattern;
     private double originalX;
@@ -40,86 +29,56 @@ public class EnemySpaceship implements Renderable, Updatable {
 
     public EnemySpaceship() throws IOException {
         // Random spawn position at top of screen
-        this.x = rand.nextInt((int)(Window.getWinWidth() - width));
-        this.y = -height;
-        this.originalX = x;
-        
-        // Random movement pattern (0: straight down, 1: zigzag, 2: sine wave)
-        this.movementPattern = rand.nextInt(3);
+        double x = rand.nextInt((int)(Window.getWinWidth() - 60));
+        originalX = x;
 
-        enemyShip = ImageIO.read(new File("res/Enemy.png"));
+        // Random movement pattern (0: straight down, 1: zigzag, 2: sine wave)
+        movementPattern = rand.nextInt(3);
+
+        BufferedImage enemyShip = ImageIO.read(new File("res/Enemy.png"));
+        addData("enemy", x, -60, 60, 60, 2, 100, enemyShip);
+
         Renderer.addRenderableObject(this);
         Updater.addUpdatableObjects(this);
     }
-
-    @Override
-    public int getLayer() {
-        return layer;
-    }
-
-    @Override
-    public double getX() {
-        return x;
-    }
-
-    @Override
-    public double getY() {
-        return y;
-    }
-
-    @Override
-    public double getWidth() {
-        return width;
-    }
-
-    @Override
-    public double getHeight() {
-        return height;
-    }
-
-    @Override
-    public BufferedImage getBufferedImage() {
-        return enemyShip;
-    }
-
     @Override
     public void update() throws IOException, UnsupportedAudioFileException, LineUnavailableException {
         // Movement patterns
         switch (movementPattern) {
             case 0: // Straight down
-                y += speed * FPS.getDeltaTime();
+                ChangeY(getY() + getSpeed() * FPS.getDeltaTime());
                 break;
                 
             case 1: // Zigzag pattern
-                y += speed * FPS.getDeltaTime();
-                x += direction * speed * 0.5 * FPS.getDeltaTime();
-                
+                ChangeY(getY() + getSpeed() * FPS.getDeltaTime());
+                ChangeX(getX() + direction * getSpeed() * 0.5 * FPS.getDeltaTime());
+
                 // Change direction when hitting screen edges
-                if (x <= 0 || x >= Window.getWinWidth() - width) {
+                if (getX() <= 0 || getX() >= Window.getWinWidth() - getWidth()) {
                     direction *= -1;
                 }
                 break;
                 
             case 2: // Sine wave pattern
-                y += speed * FPS.getDeltaTime();
+                ChangeY(getY() + getSpeed() * FPS.getDeltaTime());
                 oscillationTime += FPS.getDeltaTime();
-                x = originalX + Math.sin(oscillationTime * 3) * 100;
+                ChangeX(originalX + Math.sin(oscillationTime * 3) * 100);
                 
                 // Keep within screen bounds
-                if (x < 0) x = 0;
-                if (x > Window.getWinWidth() - width) x = Window.getWinWidth() - width;
+                if (getX() < 0) ChangeX(0);
+                if (getX() > Window.getWinWidth() - getWidth()) ChangeX(Window.getWinWidth() - getWidth());
                 break;
         }
 
         // Shooting logic
-        if (shootTimer.isRinging() && y > 0 && y < Window.getWinHeight() - 100) {
-            new EnemyBullet(x + (getWidth() / 2), y + getHeight());
+        if (shootTimer.isRinging() && getY() > 0 && getY() < Window.getWinHeight() - 100) {
+            new EnemyBullet(getX() + (getWidth() / 2), getY() + getHeight());
             Sound.playSound("res/laser2.wav");
             shootTimer.resetTimer();
         }
 
         // Remove if off screen
-        if (y >= Window.getWinHeight() + height) {
+        if (getY() >= Window.getWinHeight() + getHeight()) {
             Updater.removeUpdatable(this);
             Renderer.removeRenderableObject(this);
         }
@@ -134,15 +93,5 @@ public class EnemySpaceship implements Renderable, Updatable {
             Updater.removeUpdatable(collidingBullet);
             Renderer.removeRenderableObject(collidingBullet.getRenderable());
         }
-    }
-
-    @Override
-    public String getID() {
-        return "enemy";
-    }
-
-    @Override
-    public Renderable getRenderable() {
-        return this;
     }
 }

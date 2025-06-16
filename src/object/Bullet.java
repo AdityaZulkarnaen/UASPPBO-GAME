@@ -9,71 +9,26 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import render.Renderable;
 import render.Renderer;
 import update.Updatable;
 import update.Updater;
 
-public class Bullet implements Updatable, Renderable {
-    private static double width = 30;
-    private static double height = 40;
-    private double x;
-    private double y;
-
-    private final int layer = 1;
-
-    private static BufferedImage bullet;
-
-    private static double speed = 800;
-
+public class Bullet extends UpdatableRenderableObj{
     public Bullet(double x, double y) throws IOException {
-        this.x = x - (getWidth() / 2);
-        this.y = y;
-
-        bullet = ImageIO.read(new File("res/Bullet.png"));
+        BufferedImage bullet = ImageIO.read(new File("res/Bullet.png"));
+        addData("bullet", x - (getWidth() / 2), y, 30, 40, 1, 800, bullet);
 
         Renderer.addRenderableObject(this);
         Updater.addUpdatableObjects(this);
     }
-
-    @Override
-    public int getLayer() {
-        return layer;
-    }
-
-    @Override
-    public double getX() {
-        return x;
-    }
-
-    @Override
-    public double getY() {
-        return y;
-    }
-
-    @Override
-    public double getWidth() {
-        return width;
-    }
-
-    @Override
-    public double getHeight() {
-        return height;
-    }
-
-    @Override
-    public BufferedImage getBufferedImage() {
-        return bullet;
-    }
-
+    
     @Override
     public void update() throws IOException, UnsupportedAudioFileException, LineUnavailableException {
-        y -= speed * FPS.getDeltaTime();
-        if(y< -getHeight()){
+        ChangeY(getY() - getSpeed() * FPS.getDeltaTime());
+        if(getY() < -getHeight()){
             Updater.removeUpdatable(this);
             Renderer.removeRenderableObject(this);
         }
-
         Updatable collidingObject = isColliding(this, "asteroid");
         if (collidingObject != null) {
             Updater.removeUpdatable(this);
@@ -102,15 +57,5 @@ public class Bullet implements Updatable, Renderable {
 
             Sound.playSound("res/crushed.wav");
         }
-    }
-
-    @Override
-    public String getID() {
-        return "bullet";
-    }
-
-    @Override
-    public Renderable getRenderable() {
-        return this;
     }
 }

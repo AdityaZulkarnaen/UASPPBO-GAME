@@ -4,7 +4,6 @@ import core.FPS;
 import core.GameManager;
 import core.Sound;
 import core.Window;
-import render.Renderable;
 import render.Renderer;
 import update.Updatable;
 import update.Updater;
@@ -16,64 +15,20 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class EnemyBullet implements Updatable, Renderable {
-    private static double width = 20;
-    private static double height = 20;
-    private double x;
-    private double y;
-
-    private final int layer = 1;
-
-    private static BufferedImage enemyBullet;
-
-    private static double speed = 200;
-
+public class EnemyBullet extends UpdatableRenderableObj {
     public EnemyBullet(double x, double y) throws IOException {
-        this.x = x - (getWidth() / 2);
-        this.y = y;
-
-        enemyBullet = ImageIO.read(new File("res/EnemyBullet.png"));
+        BufferedImage enemyBullet = ImageIO.read(new File("res/EnemyBullet.png"));
+        addData("enemyBullet", x - (getWidth() / 2), y, 20, 20, 1, 300, enemyBullet);
 
         Renderer.addRenderableObject(this);
         Updater.addUpdatableObjects(this);
     }
-
-    @Override
-    public int getLayer() {
-        return layer;
-    }
-
-    @Override
-    public double getX() {
-        return x;
-    }
-
-    @Override
-    public double getY() {
-        return y;
-    }
-
-    @Override
-    public double getWidth() {
-        return width;
-    }
-
-    @Override
-    public double getHeight() {
-        return height;
-    }
-
-    @Override
-    public BufferedImage getBufferedImage() {
-        return enemyBullet;
-    }
-
     @Override
     public void update() throws IOException, UnsupportedAudioFileException, LineUnavailableException {
-        y += speed * FPS.getDeltaTime(); // Move downward
-        
+        ChangeY(getY() + getSpeed() * FPS.getDeltaTime());
+
         // Remove if off screen
-        if (y > Window.getWinHeight() + getHeight()) {
+        if (getY() > Window.getWinHeight() + getHeight()) {
             Updater.removeUpdatable(this);
             Renderer.removeRenderableObject(this);
         }
@@ -105,15 +60,5 @@ public class EnemyBullet implements Updatable, Renderable {
 
             Sound.playSound("res/EnemyDeath.wav");
         }
-    }
-
-    @Override
-    public String getID() {
-        return "enemyBullet";
-    }
-
-    @Override
-    public Renderable getRenderable() {
-        return this;
     }
 }
