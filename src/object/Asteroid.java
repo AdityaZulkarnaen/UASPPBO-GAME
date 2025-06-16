@@ -2,99 +2,38 @@ package object;
 
 import core.FPS;
 import core.Window;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
-import render.Renderable;
 import render.Renderer;
-import update.Updatable;
 import update.Updater;
 
-public class Asteroid implements Updatable, Renderable {
-    private double width;
-    private double height;
-    private double x;
-    private double y;
-
-    private final int layer = 1;
-
-    private static BufferedImage asteroid;
-
-    private double speed = 150;
-
-    Random rand = new Random();
-
+public class Asteroid extends UpdatableRenderableObj {
     public Asteroid() throws IOException {
+        Random rand = new Random();
         int dimension = rand.nextInt(75+1);
         if(dimension <35)
             dimension = 35;
 
-        width = dimension;
-        height = dimension;
-
         int posX = rand.nextInt((int)Window.getWinWidth() - (int)getWidth() + 1);
-        this.x = posX;
-        this.y = -getHeight();
-
-        asteroid = ImageIO.read(new File("res/Asteroid.png"));
+        addData("asteroid", posX, -dimension, dimension, dimension, 1, 150, ImageIO.read(new File("res/Asteroid.png")));
 
         Renderer.addRenderableObject(this);
         Updater.addUpdatableObjects(this);
     }
     @Override
-    public int getLayer() {
-        return layer;
-    }
+    public void update() {
+        ChangeY(getY() + getSpeed() * FPS.getDeltaTime());
 
-    @Override
-    public double getX() {
-        return x;
-    }
-
-    @Override
-    public double getY() {
-        return y;
-    }
-
-    @Override
-    public double getWidth() {
-        return width;
-    }
-
-    @Override
-    public double getHeight() {
-        return height;
-    }
-
-    @Override
-    public boolean drawCollisionBox() {
-        return false; // Changed from true to false
-    }
-
-    @Override
-    public BufferedImage getBufferedImage() {
-        return asteroid;
-    }
-
-    @Override
-    public void update() throws IOException {
-        y += speed* FPS.getDeltaTime();
-
-        if(y >= Window.getWinHeight()){
+        if(getY() >= Window.getWinHeight()){
             Updater.removeUpdatable(this);
             Renderer.removeRenderableObject(this);
         }
-    }
-
-    @Override
-    public String getID() {
-        return "asteroid";
-    }
-
-    @Override
-    public Renderable getRenderable() {
-        return this;
+        if(getX() < 0) {
+            ChangeX(0);
+        } else if(getX() + getWidth() > Window.getWinWidth()) {
+            ChangeX(Window.getWinWidth() - getWidth());
+        }
     }
 }

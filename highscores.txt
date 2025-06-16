@@ -2,9 +2,9 @@ Player,3400
 fauzan,3400
 fira,2400
 n,2200
+Player,1900
 giono,1800
 giono,1800
 Zan,1800
 Zann,1500
 zan,1500
-Player,1400

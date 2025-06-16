@@ -78,11 +78,6 @@ public class EnemySpaceship implements Renderable, Updatable {
     }
 
     @Override
-    public boolean drawCollisionBox() {
-        return false; // Changed from true to false
-    }
-
-    @Override
     public BufferedImage getBufferedImage() {
         return enemyShip;
     }

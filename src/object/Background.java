@@ -56,12 +56,7 @@ public class Background implements Renderable, Updatable {
     public double getHeight() {
         return height;
     }
-
-    @Override
-    public boolean drawCollisionBox() {
-        return false;
-    }
-
+    
     @Override
     public BufferedImage getBufferedImage() {
         return background;

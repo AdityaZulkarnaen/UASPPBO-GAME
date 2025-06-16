@@ -62,11 +62,6 @@ public class Bullet implements Updatable, Renderable {
     }
 
     @Override
-    public boolean drawCollisionBox() {
-        return false; // Changed from true to false
-    }
-
-    @Override
     public BufferedImage getBufferedImage() {
         return bullet;
     }

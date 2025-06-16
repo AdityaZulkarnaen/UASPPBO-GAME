@@ -64,11 +64,6 @@ public class UI implements Renderable {
     }
 
     @Override
-    public boolean drawCollisionBox() {
-        return false;
-    }
-
-    @Override
     public BufferedImage getBufferedImage() {
         return null; // We'll override drawSprite instead
     }
