@@ -10,6 +10,7 @@ public class UI implements Renderable {
     private final int layer = 100; // High layer to render on top
     private static boolean gameOver = false;
     private static boolean gamePaused = false; // Add pause state
+    private static boolean gameNotStarted = true; // Add not started state
 
     public UI() {
         Renderer.addRenderableObject(this);
@@ -29,6 +30,12 @@ public class UI implements Renderable {
 
     public static boolean isGamePaused() {
         return gamePaused;
+    }
+    public static void setGameNotStarted(boolean notStarted) {
+        UI.gameNotStarted = notStarted;
+    }
+    public static boolean isGameNotStarted() {
+        return gameNotStarted;
     }
 
     @Override
@@ -125,6 +132,34 @@ public class UI implements Renderable {
             g.drawString(resumeText,
                 (int)(Window.getWinWidth() - textWidth) / 2,
                 (int)Window.getWinHeight() / 2 + 25);
+        } else if (gameNotStarted) {
+            // Draw only a light overlay and instructions, so game background is visible
+            g.setColor(new Color(0, 0, 0, 80));
+            g.fillRect(0, 0, (int)Window.getWinWidth(), (int)Window.getWinHeight());
+
+            g.setFont(new Font("Arial", Font.BOLD, 48));
+            g.setColor(Color.CYAN);
+            FontMetrics fm = g.getFontMetrics();
+            String titleText = "SPACE WAR";
+            int textWidth = fm.stringWidth(titleText);
+            g.drawString(titleText,
+                (int)(Window.getWinWidth() - textWidth) / 2,
+                (int)Window.getWinHeight() / 2 - 50);
+
+            g.setFont(new Font("Arial", Font.BOLD, 24));
+            g.setColor(Color.WHITE);
+            fm = g.getFontMetrics();
+            String startText = "Press ENTER to start";
+            textWidth = fm.stringWidth(startText);
+            g.drawString(startText,
+                (int)(Window.getWinWidth() - textWidth) / 2,
+                (int)Window.getWinHeight() / 2);
+
+            String highScoreText = "High Score: " + Score.getHighScore();
+            textWidth = fm.stringWidth(highScoreText);
+            g.drawString(highScoreText,
+                (int)(Window.getWinWidth() - textWidth) / 2,
+                (int)Window.getWinHeight() / 2 + 40);
         } else {
             // Normal UI display
             g.setFont(new Font("Arial", Font.BOLD, 16));

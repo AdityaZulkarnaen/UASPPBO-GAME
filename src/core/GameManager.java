@@ -14,6 +14,7 @@ public class GameManager {
     private static boolean gamePaused = false;
     private static boolean enterPressed = false;
     private static boolean escPressed = false;
+    private static boolean gameNotStarted = true;
 
     public static void setGameRunning(boolean running) {
         gameRunning = running;
@@ -25,6 +26,9 @@ public class GameManager {
 
     public static boolean isGamePaused() {
         return gamePaused;
+    }
+    public static boolean isGameNotStarted() {
+        return gameNotStarted;
     }
 
     public static void setGamePaused(boolean paused) {
@@ -60,9 +64,15 @@ public class GameManager {
     }
 
     public static void checkRestart() throws Exception {
-        if (!gameRunning && Input.keys[Input.ENTER] && !enterPressed) {
+        if (!gameRunning && Input.keys[Input.ENTER] && !enterPressed && !gameNotStarted) {
             enterPressed = true;
             restartGame();
+        }
+        if (gameNotStarted && Input.keys[Input.ENTER] && !enterPressed) {
+            enterPressed = true;
+            gameRunning = true;
+            gameNotStarted = false;
+            UI.setGameNotStarted(false);
         }
 
         if (!Input.keys[Input.ENTER]) {
@@ -87,22 +97,35 @@ public class GameManager {
     }
 
     private static void restartGame() throws Exception {
+        System.out.println("Restarting game...");
+        UI.setGameOver(false);
+        initializeGame();
+        gameRunning = true;
+        gamePaused = false;
+        enterPressed = false;
+        escPressed = false;
+        gameNotStarted = false;
+        UI.setGameNotStarted(false);
+        Score.resetGame();
+        UI.setGamePaused(false);
+    }
+    public static void initializeGame() throws Exception {
+        gameRunning = false;
+        gamePaused = false;
+        enterPressed = false;
+        escPressed = false;
+        gameNotStarted = true;
+
         Updater.clearAll();
         Renderer.clearAll();
 
-
-        gameRunning = true;
-        gamePaused = false;
-        UI.setGameOver(false);
-        UI.setGamePaused(false);
-        Score.resetGame();
         new Spaceship(Window.getWinWidth() / 2 - (Spaceship.width / 2), Window.getWinHeight() - 150);
         new Background(0);
         new Background(-Window.getWinHeight());
         new AsteroidSpawner();
         new EnemySpawner();
         new UI();
-
-        System.out.println("Game Restarted!");
+        Score.resetGame();
+        System.out.println("Game Initialized!");
     }
 }
