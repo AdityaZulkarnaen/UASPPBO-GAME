@@ -17,7 +17,7 @@ public class Updater {
         try {
             // Check for restart input
             GameManager.checkRestart();
-            
+
             // Only update game objects if game is running
             if (GameManager.isGameRunning()) {
                 for(Updatable object: updatableObjects)
@@ -37,15 +37,15 @@ public class Updater {
     public static void addUpdatableObjects(Updatable object) {
         addUpdatableObjects.add(object);
     }
-    
+
     public static void removeUpdatable(Updatable object) {
         removeUpdatableObjects.add(object);
     }
-    
+
     public static ArrayList<Updatable> getUpdatableObjects() {
         return updatableObjects;
     }
-    
+
     public static void clearAll() {
         updatableObjects.clear();
         addUpdatableObjects.clear();
